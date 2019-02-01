@@ -62,6 +62,13 @@
 			<version>2.7.0</version>
 		</dependency>
 		
+		<!-- Apache common IO for utility -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+		
 	</dependencies>
 
 	<build>
