@@ -20,11 +20,11 @@ public class PingEndpoint {
 	
 	
 	@GetMapping(value="/ping")
-	@ApiOperation(value="Checks if application is up. Used as a Kubernetes health check.", response=String.class)
+	@ApiOperation(value="Checks if application is up. Can be used as a Kubernetes health check.", response=String.class)
 	@ApiResponses(value= {
 		@ApiResponse(message="Application up and running", code=200),
 		@ApiResponse(message="Application didn't start", code=500)
-		}	
+		}
 	)
 	public String ping() {
 		final LocalDateTime ldt = LocalDateTime.now();
