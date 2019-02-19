@@ -22,7 +22,6 @@ import io.swagger.annotations.Api;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
 
-import org.apache.commons.io.IOUtils;
  
 /**
  * Version V1 uses the qrgen library for generating the QR Code:com.github.kenglxn;
@@ -77,13 +76,21 @@ public class QRCodeGenV1API {
 		return toReturn;
 	}
 	
-	@PostMapping(value="/generate/png", produces=MediaType.IMAGE_PNG_VALUE)
-	public ResponseEntity<String> generateQRCode(QRCodeModel model) {
+	@PostMapping(value="/generate/png", 
+			produces=MediaType.TEXT_PLAIN_VALUE, 
+			consumes=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> generateQRCode(@RequestBody QRCodeModel model) {
 		if (model==null || model.getText() == null || model.getText().isEmpty() ) {
-			return new ResponseEntity<String>("No valid mode passed", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("No valid model passed", HttpStatus.BAD_REQUEST);
 		}
+		System.out.println("request made: " + model.toString());
+		ByteArrayOutputStream baos = QRCode.from(model.getText()).
+				withSize(imgSize, imgSize).
+				to(ImageType.PNG).
+				stream();
 		
-		return new ResponseEntity<String>("", HttpStatus.OK);
+		String toReturn = Base64.getEncoder().encodeToString(baos.toByteArray());		
+		return new ResponseEntity<String>(toReturn, HttpStatus.OK);
 	}
 	
 }
