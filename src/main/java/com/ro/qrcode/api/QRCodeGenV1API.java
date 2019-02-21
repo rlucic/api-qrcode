@@ -77,8 +77,9 @@ public class QRCodeGenV1API {
 	}
 	
 	@PostMapping(value="/generate/png", 
-			produces=MediaType.TEXT_PLAIN_VALUE, 
+			produces= {MediaType.TEXT_PLAIN_VALUE, MediaType.IMAGE_PNG_VALUE}, 
 			consumes=MediaType.APPLICATION_JSON_VALUE)
+	//@ResponseBody
 	public ResponseEntity<String> generateQRCode(@RequestBody QRCodeModel model) {
 		if (model==null || model.getText() == null || model.getText().isEmpty() ) {
 			return new ResponseEntity<String>("No valid model passed", HttpStatus.BAD_REQUEST);
@@ -89,7 +90,8 @@ public class QRCodeGenV1API {
 				to(ImageType.PNG).
 				stream();
 		
-		String toReturn = Base64.getEncoder().encodeToString(baos.toByteArray());		
+		String toReturn = Base64.getEncoder().encodeToString(baos.toByteArray());
+		
 		return new ResponseEntity<String>(toReturn, HttpStatus.OK);
 	}
 	
