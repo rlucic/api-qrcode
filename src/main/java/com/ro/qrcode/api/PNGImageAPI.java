@@ -6,7 +6,9 @@ import java.util.Base64;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +37,7 @@ public class PNGImageAPI {
 //	@GetMapping(value="/getb64/{name}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@GetMapping(value="/getb64/{name}", produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
-	public String returnBase64EncodedImage(@PathVariable(value="name") String imageName) throws IOException{
+	public ResponseEntity<String> returnBase64EncodedImage(@PathVariable(value="name") String imageName) throws IOException{
 		String theName = imageName+".png";
 		System.out.println("retrieving image from: " + theName);
 		ClassPathResource classPathResource = new ClassPathResource(theName);
@@ -43,8 +45,8 @@ public class PNGImageAPI {
 		
 		//String encodedfile = new String(Base64.encodeBase64(IOUtils.toByteArray(in)), "UTF-8");
 		
-		return new String(Base64.getEncoder().encodeToString(IOUtils.toByteArray(in)));
-		//return new String(IOUtils.toByteArray(in));
+		String toReturn = Base64.getEncoder().encodeToString(IOUtils.toByteArray(in));
+		return new ResponseEntity<String>(toReturn, HttpStatus.OK);
 	}
 
 }
