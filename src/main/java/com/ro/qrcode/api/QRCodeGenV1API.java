@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,13 @@ import net.glxn.qrgen.javase.QRCode;
  
 /**
  * Version V1 uses the qrgen library for generating the QR Code:com.github.kenglxn;
- * 
+ * The four methods:
+ * - generateQRCodeB64 and
+ * - generateQRCodeAsPNG
+ * - ping
+ * - pingb64
+ * show a sample of client content negotiation using the Accept header
+ *  
  * @author rlucic
  *
  */
@@ -45,7 +52,7 @@ public class QRCodeGenV1API {
 	 * 
 	 * @return
 	 */
-	@GetMapping(value="/test/png", produces=MediaType.IMAGE_PNG_VALUE)
+	@GetMapping(value="/test", produces=MediaType.IMAGE_PNG_VALUE)
 	@ResponseBody
 	public byte[] ping() {
 		
@@ -61,9 +68,9 @@ public class QRCodeGenV1API {
 	 * Testing endpoint for generating a test QR code image encoded as Base64.
 	 * Encoded image type: PNG.
 	 * 
-	 * @return String as Base64 encodinng of the QR code.
+	 * @return String as Base64 encoding of the QR code.
 	 */
-	@GetMapping(value="/test/b64", produces=MediaType.TEXT_PLAIN_VALUE)
+	@GetMapping(value="/test", produces=MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public String pingb64() {
 		ByteArrayOutputStream baos = QRCode.from(textForQRCode).
@@ -76,23 +83,64 @@ public class QRCodeGenV1API {
 		return toReturn;
 	}
 	
-	@PostMapping(value="/generate/png", 
-			produces= {MediaType.TEXT_PLAIN_VALUE, MediaType.IMAGE_PNG_VALUE}, 
+	/**
+	 * Generates a Base64 encoded QRCode
+	 * 
+	 * @param model
+	 * @param acceptHeader
+	 * @return
+	 */
+	@PostMapping(value="/generate", 
+			produces= {MediaType.TEXT_PLAIN_VALUE}, 
 			consumes=MediaType.APPLICATION_JSON_VALUE)
-	//@ResponseBody
-	public ResponseEntity<String> generateQRCode(@RequestBody QRCodeModel model) {
+	public ResponseEntity<Object> generateQRCodeB64(@RequestBody QRCodeModel model, 
+			@RequestHeader(name="Accept", required=false) String acceptHeader) 
+	{
+		String toReturn = "";
 		if (model==null || model.getText() == null || model.getText().isEmpty() ) {
-			return new ResponseEntity<String>("No valid model passed", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("No valid model passed", HttpStatus.BAD_REQUEST);
 		}
-		System.out.println("request made: " + model.toString());
+		
+		System.out.println("Accept header: " + acceptHeader);
+		System.out.println("Request made: " + model.toString());
+		
+		//if not as an image, return Base64 encoded
 		ByteArrayOutputStream baos = QRCode.from(model.getText()).
 				withSize(imgSize, imgSize).
 				to(ImageType.PNG).
 				stream();
 		
-		String toReturn = Base64.getEncoder().encodeToString(baos.toByteArray());
+		toReturn = Base64.getEncoder().encodeToString(baos.toByteArray());
+		return new ResponseEntity<>(toReturn, HttpStatus.OK);
 		
-		return new ResponseEntity<String>(toReturn, HttpStatus.OK);
 	}
 	
+	/**
+	 * Generates a QRCode and returns it streamed as an image
+	 * 
+	 * @param model
+	 * @param acceptHeader
+	 * @return
+	 */
+	@PostMapping(value="/generate", 
+			produces= {MediaType.IMAGE_PNG_VALUE}, 
+			consumes=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> generateQRCodeAsPNG(@RequestBody QRCodeModel model,
+			@RequestHeader(name="Accept", required=false) String acceptHeader) 
+	{
+		if (model==null || model.getText() == null || model.getText().isEmpty() ) {
+			return new ResponseEntity<>("No valid model passed", HttpStatus.BAD_REQUEST);
+		}
+		
+		System.out.println("Accept header: " + acceptHeader);
+		System.out.println("request made: " + model.toString());
+		
+		//if requested as an PNG image, return an image
+		ByteArrayOutputStream baos = QRCode.from(model.getText()).
+				withSize(imgSize, imgSize).
+				to(ImageType.PNG).
+				stream();
+
+		return new ResponseEntity<>(baos.toByteArray(), HttpStatus.OK);
+	}
 }
