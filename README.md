@@ -16,11 +16,11 @@ generates QR codes
 ### Version V1 of the API 
 Is using the QR Code library: com.github.kenglxn
 sample test calls (no Accept header needed):
-- GET: http://localhost:8080/api-qrcode/image/getpng/{image-name}
-- GET: http://localhost:8080/api-qrcode/image/getb64/{image-name}
+- GET: http://localhost:8080/api-qrcode/image/getpng/{image-name-no-extension}
+- GET: http://localhost:8080/api-qrcode/image/getb64/{image-name-no-extension}
 
 sample calls: 
-- GET: http://localhost:8080/api-qrcode/image/v1/test (only test1.png exists)
+- GET: http://localhost:8080/api-qrcode/image/v1/test1 (only test1.png exists)
 
 Accept : text/plain , for a Base64 encoded QRCode image from hardcoded text
 
