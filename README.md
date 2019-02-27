@@ -4,7 +4,7 @@ generates QR codes
 ### Model/body for calling the POST methods: 
      {
       "text": "Some sample text",
-      "format": "B64"
+      "size": "150"
      }
 
 ### Headers for content negotiation

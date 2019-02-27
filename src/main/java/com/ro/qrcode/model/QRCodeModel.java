@@ -3,13 +3,13 @@ package com.ro.qrcode.model;
 public class QRCodeModel {
 
 	private String text;
-	private String format;
+	private int size;
 	
 	
-	public QRCodeModel(String text, String format) {
+	public QRCodeModel(String text, int format) {
 		super();
 		this.text = text;
-		this.format = format;
+		this.size = size;
 	}
 	
 	public QRCodeModel() {
@@ -24,17 +24,19 @@ public class QRCodeModel {
 		this.text = text;
 	}
 
-	public String getFormat() {
-		return format;
+
+
+	public int getSize() {
+		return size;
 	}
 
-	public void setFormat(String format) {
-		this.format = format;
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 	@Override
 	public String toString() {
-		return "QRCodeModel [text=" + text + ", format=" + format + "]";
+		return "QRCodeModel [text=" + text + ", image size=" + size + "pixels]";
 	}
 	
 	
