@@ -101,6 +101,10 @@ public class QRCodeGenV1API {
 			return new ResponseEntity<>("No valid model passed", HttpStatus.BAD_REQUEST);
 		}
 		
+		if (model.getSize() <= 100 ) {
+			return new ResponseEntity<>("No valid model passed. Size too small:" + model.getSize(), HttpStatus.BAD_REQUEST);
+		}
+		
 		System.out.println("Accept header: " + acceptHeader);
 		System.out.println("Request made: " + model.toString());
 		
@@ -131,13 +135,17 @@ public class QRCodeGenV1API {
 		if (model==null || model.getText() == null || model.getText().isEmpty() ) {
 			return new ResponseEntity<>("No valid model passed", HttpStatus.BAD_REQUEST);
 		}
+
+		if (model.getSize() <= 100 ) {
+			return new ResponseEntity<>("No valid model passed. Size too small:" + model.getSize(), HttpStatus.BAD_REQUEST);
+		}
 		
 		System.out.println("Accept header: " + acceptHeader);
 		System.out.println("request made: " + model.toString());
 		
 		//if requested as an PNG image, return an image
 		ByteArrayOutputStream baos = QRCode.from(model.getText()).
-				withSize(imgSize, imgSize).
+				withSize(model.getSize(), model.getSize()).
 				to(ImageType.PNG).
 				stream();
 
