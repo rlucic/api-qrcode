@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ro.qrcode.exception.ImageSizeException;
 import com.ro.qrcode.model.QRCodeModel;
 
 import io.swagger.annotations.Api;
@@ -93,8 +94,9 @@ public class QRCodeGenV1API {
 	@PostMapping(value="/generate", 
 			produces= {MediaType.TEXT_PLAIN_VALUE}, 
 			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> generateQRCodeB64(@RequestBody QRCodeModel model, 
+	public ResponseEntity<Object> generateQRCodeB64(@RequestBody QRCodeModel model,
 			@RequestHeader(name="Accept", required=false) String acceptHeader) 
+			throws ImageSizeException
 	{
 		String toReturn = "";
 		if (model==null || model.getText() == null || model.getText().isEmpty() ) {
@@ -102,7 +104,9 @@ public class QRCodeGenV1API {
 		}
 		
 		if (model.getSize() <= 100 ) {
-			return new ResponseEntity<>("No valid model passed. Size too small:" + model.getSize(), HttpStatus.BAD_REQUEST);
+			System.out.println("Throwing: ImageSizeException");
+			throw new ImageSizeException("No valid model passed. Size too small: " + model.getSize());
+			//return new ResponseEntity<>("No valid model passed. Size too small: " + model.getSize(), HttpStatus.BAD_REQUEST);
 		}
 		
 		System.out.println("Accept header: " + acceptHeader);
@@ -131,13 +135,16 @@ public class QRCodeGenV1API {
 			consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> generateQRCodeAsPNG(@RequestBody QRCodeModel model,
 			@RequestHeader(name="Accept", required=false) String acceptHeader) 
+			throws ImageSizeException
 	{
 		if (model==null || model.getText() == null || model.getText().isEmpty() ) {
 			return new ResponseEntity<>("No valid model passed", HttpStatus.BAD_REQUEST);
 		}
 
 		if (model.getSize() <= 100 ) {
-			return new ResponseEntity<>("No valid model passed. Size too small:" + model.getSize(), HttpStatus.BAD_REQUEST);
+			System.out.println("Throwing: ImageSizeException");
+			throw new ImageSizeException("No valid model passed. Size too small: " + model.getSize());
+			//return new ResponseEntity<>("No valid model passed. Size too small: " + model.getSize(), HttpStatus.BAD_REQUEST);
 		}
 		
 		System.out.println("Accept header: " + acceptHeader);
