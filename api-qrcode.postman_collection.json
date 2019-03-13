@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "368434a0-6dd5-49b8-8bf3-45b2a8a6fdfe",
+		"name": "api-qrcode",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/api-qrcode/image/v1/generate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": false
+					},
+					{
+						"key": "Accept",
+						"value": "image/png",
+						"disabled": false
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n  \"text\": \"Some sample text\",\r\n  \"size\": \"150\"\r\n }\r\n "
+				},
+				"url": {
+					"raw": "http://localhost:8080/api-qrcode/image/v1/generate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-qrcode",
+						"image",
+						"v1",
+						"generate"
+					]
+				},
+				"description": "generate PNG, return Base64 encoded"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api-qrcode/image/v1/generate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": false
+					},
+					{
+						"key": "Accept",
+						"value": "text/plain",
+						"disabled": false
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n  \"text\": \"Some sample text\",\r\n  \"size\": \"150\"\r\n }\r\n "
+				},
+				"url": {
+					"raw": "http://localhost:8080/api-qrcode/image/v1/generate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-qrcode",
+						"image",
+						"v1",
+						"generate"
+					]
+				},
+				"description": "generate PNG, return as image/png"
+			},
+			"response": []
+		}
+	]
+}
