@@ -1,11 +1,6 @@
 # api-qrcode
 generates QR codes
 
-### Model/body for calling the POST methods: 
-     {
-      "text": "Some sample text",
-      "size": "150"
-     }
 
 ### Headers for content negotiation
 `- Accept : text/plain , for a Base64 encoded QRCode image`
@@ -34,7 +29,11 @@ Accept : image/png , for a streamed QRCode image from hardcoded text
 - POST: http://localhost:8080/api-qrcode/image/v1/generate
 
 Accept : text/plain , for a Base64 encoded QRCode image from the model text field
-
 Accept : image/png , for a streamed QRCode image from the model text field
 
+### Model/body for calling the POST methods: 
+     {
+      "text": "Some sample text",
+      "size": "150"
+     }
 

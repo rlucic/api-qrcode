@@ -20,7 +20,8 @@ import io.swagger.annotations.ApiResponses;
 @Api
 public class PingEndpoint {
 	
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+//	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private Logger jsonLogger = LoggerFactory.getLogger("jsonLogger");
 	
 	@Value("${prop1:abcd}")
 	String prop1;
@@ -35,8 +36,11 @@ public class PingEndpoint {
 	public ResponseEntity<String> ping() {
 		final LocalDateTime ldt = LocalDateTime.now();
 
-		logger.info("pong from api-qrcode, @" + ldt.toString()); 
-		logger.info("property from a separate file: {}", prop1);
+		jsonLogger.info("pong from api-qrcode, @" + ldt.toString()); 
+		//logger.info("property from a separate file: {}", prop1);
+		jsonLogger.debug("property from a separate file: {}", prop1);
+		
+		jsonLogger.debug("pong from api-qrcode json logger, @" + ldt.toString()); 
 		
 		return new ResponseEntity<>("pong from api-qrcode, @" + ldt.toString(), HttpStatus.OK);
 	}
